@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@atlaskit/code": "^14.4.8",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@fontsource/roboto": "^4.5.8",

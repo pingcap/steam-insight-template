@@ -14,6 +14,7 @@ import {
 
 import { stringToColor } from "@/utils";
 import { ChartLine } from "@/components/Chart/LineChart";
+import SQLDialog from "@/components/Dialog/SQLDialog";
 
 const DynamicLineChart = dynamic(() => import("@/components/Chart/LineChart"), {
   loading: () => <>Loading...</>,
@@ -667,23 +668,71 @@ const MOCK_TOP_10_GENRE_RELEASED = [
 ];
 
 const MOCK_DATA = [
-  { title: "Game Released", data: MOCK_GAME_RELEASED, syncId: "time-series" },
+  {
+    title: "Game Released",
+    data: MOCK_GAME_RELEASED,
+    syncId: "time-series",
+    sql: `SELECT 
+  YEAR (games.release_date) AS release_year,
+  count(*) AS num
+FROM games
+WHERE games.release_date < '2023-01-01'
+GROUP BY YEAR (games.release_date)`,
+  },
   {
     title: "Good Game Released",
     data: MOCK_GOOD_GAME_RELEASED,
     syncId: "time-series",
+    sql: `SELECT 
+    YEAR (games.release_date) AS release_year,
+    count(*) AS num
+FROM games
+WHERE games.release_date < '2023-01-01'
+AND games.metacritic_score > 85
+GROUP BY YEAR (games.release_date)`,
   },
   {
     title: "Top 10 Lang",
     data: MOCK_TOP_10_LANG_RELEASED,
     syncId: "time-series",
     field: "language_name",
+    sql: `WITH top10_languages AS (
+      SELECT 
+          language_id,
+          COUNT(app_id) AS num
+      FROM supported_language
+      GROUP BY language_id
+      ORDER BY num DESC
+      LIMIT 10
+  )
+  SELECT 
+      l.language_name AS language_name,
+      YEAR(g.release_date) AS release_year,
+      COUNT(*) AS num
+  FROM supported_language AS sl
+  LEFT JOIN games g ON g.app_id = sl.app_id
+  LEFT JOIN language l ON l.language_id = sl.language_id
+  INNER JOIN top10_languages top10 ON top10.language_id = sl.language_id
+  WHERE g.release_date < '2023-01-01'
+  GROUP BY l.language_name, YEAR(g.release_date)
+  `,
   },
   {
     title: "Top 10 Genre",
     data: MOCK_TOP_10_GENRE_RELEASED,
     syncId: "time-series",
     field: "genre_name",
+    sql: `SELECT 
+    genre.genre_name AS genre_name,
+    YEAR(g.release_date) AS release_year,
+    COUNT(*) AS num
+FROM game_genre AS gg
+LEFT JOIN games g ON g.app_id = gg.app_id
+LEFT JOIN genre ON genre.genre_id = gg.genre_id
+WHERE g.release_date < '2023-01-01'
+GROUP BY genre.genre_name, YEAR(g.release_date)
+ORDER BY num DESC
+`,
   },
 ];
 
@@ -714,6 +763,7 @@ export default function TimeSeriesCardGroup() {
               )}
               multiLineField={item.field}
               syncId={item.syncId}
+              sql={item.sql}
             />
           </Grid>
         ))}
@@ -727,8 +777,9 @@ const TimeSeriesCardTemplate = (props: {
   data: { [x: string]: string | number }[];
   multiLineField?: string;
   syncId?: string;
+  sql?: string;
 }) => {
-  const { title, data, multiLineField, syncId } = props;
+  const { title, data, multiLineField, syncId, sql } = props;
 
   const [dataDemo, linesMemo] = React.useMemo(() => {
     const lines: ChartLine[] = [];
@@ -782,7 +833,8 @@ const TimeSeriesCardTemplate = (props: {
           <Typography variant="h6" component="div">
             {title}
           </Typography>
-          <Button size="small">View SQL</Button>
+          {/* <Button size="small">View SQL</Button> */}
+          {sql && <SQLDialog title={title} sql={sql} />}
         </Box>
         <Box
           sx={{
