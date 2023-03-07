@@ -63,7 +63,11 @@ export default function LineChartComponent(props: LineChartProps) {
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey={xDataKey || "name"} />
         <YAxis />
-        <Tooltip />
+        <Tooltip
+          itemSorter={(i) => {
+            return -(i?.value || 1);
+          }}
+        />
         {/* <Legend /> */}
         {/* <Line
         type="monotone"
