@@ -14,7 +14,7 @@ import { alpha } from "@mui/material/styles";
 
 import Header, { HeaderProps } from "@/components/Layout/Header";
 import SEO from "@/components/Layout/SEO";
-import LeftNav from "@/components/Layout/LeftNav";
+import LeftNav, { LeftNavBtn } from "@/components/Layout/LeftNav";
 import { TOP_NAV_HEIGHT, SIDE_NAV_WIDTH } from "@/utils/constants";
 
 export interface LayoutProps {
@@ -25,11 +25,31 @@ export interface LayoutProps {
 export default function Layout(props: LayoutProps) {
   const { headerProps } = props;
 
+  const [leftNavOpen, setLeftNavOpen] = React.useState(false);
+
+  const lgUp = useMediaQuery((theme: any) => theme.breakpoints.up("lg"));
+
+  const handleLeftNavClose = () => {
+    setLeftNavOpen(false);
+  };
+
+  const handleLeftNavOpen = () => {
+    setLeftNavOpen(true);
+  };
+
+  const LeftNavMenuBtnCallback = React.useCallback(() => {
+    if (lgUp) {
+      return null;
+    } else {
+      return <LeftNavBtn onClick={handleLeftNavOpen} />;
+    }
+  }, [lgUp]);
+
   return (
     <>
-      <Header {...headerProps} />
+      <Header {...headerProps} leftNavAction={<LeftNavMenuBtnCallback />} />
       <SEO />
-      <LeftNav />
+      <LeftNav open={leftNavOpen} onClose={handleLeftNavClose} />
       <Box
         sx={{
           backgroundColor: (theme) => theme.palette.background.default,

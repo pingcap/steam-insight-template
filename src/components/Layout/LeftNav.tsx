@@ -11,7 +11,9 @@ import {
   SvgIconProps,
   Typography,
   useMediaQuery,
+  IconButton,
 } from "@mui/material";
+import Bars3Icon from "@heroicons/react/24/solid/Bars3Icon";
 
 import {
   LEFT_NAV_ITEMS,
@@ -164,5 +166,17 @@ export function LeftNavItems() {
         />
       ))}
     </Stack>
+  );
+}
+
+export function LeftNavBtn(props: { onClick: () => void }) {
+  const { onClick } = props;
+
+  return (
+    <IconButton onClick={onClick}>
+      <SvgIcon fontSize="small">
+        <Bars3Icon />
+      </SvgIcon>
+    </IconButton>
   );
 }

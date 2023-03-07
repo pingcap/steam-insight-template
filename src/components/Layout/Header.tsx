@@ -17,10 +17,11 @@ import { SIDE_NAV_WIDTH, TOP_NAV_HEIGHT } from "@/utils/constants";
 
 export interface HeaderProps {
   title?: string;
+  leftNavAction?: React.ReactNode;
 }
 
 export default function Header(props: HeaderProps) {
-  const { title } = props;
+  const { title, leftNavAction } = props;
 
   return (
     <>
@@ -54,6 +55,7 @@ export default function Header(props: HeaderProps) {
               // px: 2,
             }}
           >
+            {leftNavAction}
             {title && <Typography variant="h6">{title}</Typography>}
           </Stack>
         </Container>
