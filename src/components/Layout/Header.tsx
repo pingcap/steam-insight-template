@@ -15,7 +15,13 @@ import { alpha } from "@mui/material/styles";
 
 import { SIDE_NAV_WIDTH, TOP_NAV_HEIGHT } from "@/utils/constants";
 
-export default function Header() {
+export interface HeaderProps {
+  title?: string;
+}
+
+export default function Header(props: HeaderProps) {
+  const { title } = props;
+
   return (
     <>
       <Box
@@ -26,14 +32,14 @@ export default function Header() {
             alpha(theme.palette.background.default, 0.8),
           // position: "sticky",
           position: "fixed",
-          // left: {
-          //   lg: `${SIDE_NAV_WIDTH}px`,
-          // },
+          left: {
+            lg: `${SIDE_NAV_WIDTH}px`,
+          },
           top: 0,
-          // width: {
-          //   lg: `calc(100% - ${SIDE_NAV_WIDTH}px)`,
-          // },
-          width: "100%",
+          width: {
+            lg: `calc(100% - ${SIDE_NAV_WIDTH}px)`,
+          },
+          // width: "100%",
           zIndex: (theme) => theme.zIndex.appBar,
         }}
       >
@@ -48,7 +54,7 @@ export default function Header() {
               // px: 2,
             }}
           >
-            <Typography variant="h6">Steam Insight</Typography>
+            {title && <Typography variant="h6">{title}</Typography>}
           </Stack>
         </Container>
       </Box>

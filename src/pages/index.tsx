@@ -28,8 +28,12 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head> */}
-      <Layout>
-        <Typography variant="h1">Overview</Typography>
+      <Layout
+        headerProps={{
+          title: "Data Insight",
+        }}
+      >
+        {/* <Typography variant="h1">Overview</Typography> */}
         <TimeSeriesCardGroup />
       </Layout>
     </>

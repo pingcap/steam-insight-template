@@ -64,7 +64,7 @@ export default function LineChartComponent(props: LineChartProps) {
         <XAxis dataKey={xDataKey || "name"} />
         <YAxis />
         <Tooltip />
-        <Legend />
+        {/* <Legend /> */}
         {/* <Line
         type="monotone"
         dataKey="pv"
