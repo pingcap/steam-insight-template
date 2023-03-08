@@ -20,6 +20,7 @@ import {
 import Layout from "@/components/Layout";
 import TimeSeriesCardGroup from "@/sections/home/TimeSeriesCardGroup";
 import TopTenCardGroup from "@/sections/home/TopTenCardGroup";
+import PieCardGroup from "@/sections/home/PieCardGroup";
 
 export default function Home() {
   return (
@@ -44,6 +45,7 @@ export default function Home() {
         >
           <TimeSeriesCardGroup />
           <TopTenCardGroup />
+          <PieCardGroup />
         </Grid>
       </Layout>
     </>
