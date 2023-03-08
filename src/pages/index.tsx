@@ -18,6 +18,7 @@ import {
 
 import Layout from "@/components/Layout";
 import TimeSeriesCardGroup from "@/sections/home/TimeSeriesCardGroup";
+import TopTenCardGroup from "@/sections/home/TopTenCardGroup";
 
 export default function Home() {
   return (
@@ -35,6 +36,7 @@ export default function Home() {
       >
         {/* <Typography variant="h1">Overview</Typography> */}
         <TimeSeriesCardGroup />
+        <TopTenCardGroup />
       </Layout>
     </>
   );

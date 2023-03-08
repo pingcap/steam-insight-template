@@ -14,7 +14,7 @@ import {
 
 import { stringToColor } from "@/utils";
 import { ChartLine } from "@/components/Chart/LineChart";
-import SQLDialog from "@/components/Dialog/SQLDialog";
+import ChartCardTemplate from "@/components/Card/ChartCard";
 
 const DynamicLineChart = dynamic(() => import("@/components/Chart/LineChart"), {
   loading: () => <>Loading...</>,
@@ -746,14 +746,6 @@ export default function TimeSeriesCardGroup() {
           overflow: "auto",
         }}
       >
-        {/* <Grid xs={12} md={6}>
-          <TimeSeriesCardTemplate
-            title={`Game Released`}
-            data={MOCK_GAME_RELEASED.sort((a, b) =>
-              a.release_year > b.release_year ? 1 : -1
-            )}
-          />
-        </Grid> */}
         {MOCK_DATA.map((item) => (
           <Grid key={item.title} xs={12} md={6}>
             <TimeSeriesCardTemplate
@@ -817,44 +809,13 @@ const TimeSeriesCardTemplate = (props: {
   }, [data, multiLineField]);
 
   return (
-    <Card
-      sx={{
-        minWidth: 475,
-      }}
-    >
-      <CardContent>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <Typography variant="h6" component="div">
-            {title}
-          </Typography>
-          {/* <Button size="small">View SQL</Button> */}
-          {sql && <SQLDialog title={title} sql={sql} />}
-        </Box>
-        <Box
-          sx={{
-            height: 300,
-            mt: 2,
-
-            "& *": {
-              fontFamily: `"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"`,
-              fontSize: "14px",
-            },
-          }}
-        >
-          <DynamicLineChart
-            xDataKey={XAXIS_KEY_NAME}
-            data={dataDemo}
-            lines={linesMemo}
-            syncId={syncId}
-          />
-        </Box>
-      </CardContent>
-    </Card>
+    <ChartCardTemplate title={title} sql={sql}>
+      <DynamicLineChart
+        xDataKey={XAXIS_KEY_NAME}
+        data={dataDemo}
+        lines={linesMemo}
+        syncId={syncId}
+      />
+    </ChartCardTemplate>
   );
 };

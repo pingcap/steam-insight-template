@@ -55,7 +55,7 @@ export default function LineChartComponent(props: LineChartProps) {
         margin={{
           top: 5,
           right: 30,
-          left: 20,
+          // left: 20,
           bottom: 5,
         }}
         syncId={syncId}
