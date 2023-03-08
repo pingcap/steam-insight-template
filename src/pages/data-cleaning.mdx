@@ -1,0 +1,531 @@
+import Layout from "@/components/Layout";
+
+## [Main Table] [Entity] games
+
+```python
+from sqlalchemy import create_engine, String, Column, Integer, \
+    DateTime, Numeric, TEXT, Boolean, BigInteger, select, func
+from sqlalchemy.orm import declarative_base, sessionmaker
+import os
+import json
+import time
+from datetime import datetime
+
+engine = create_engine('mysql://root:@127.0.0.1:4000/test')
+Base = declarative_base()
+
+class Games(Base):
+    __tablename__ = "games"
+
+    app_id = Column(Integer, primary_key=True)
+    name = Column(String(256))
+    release_date = Column(DateTime)
+    estimated_owners = Column(String(256))
+    peak_ccu = Column(Integer)
+    required_age = Column(Integer)
+    price = Column(Numeric)
+    dlc_count = Column(Integer)
+    short_description = Column(TEXT)
+    supported_languages = Column(String(4096))
+    full_audio_languages = Column(String(4096))
+    reviews = Column(TEXT)
+    header_image = Column(String(1024))
+    website = Column(String(1024))
+    support_url = Column(String(1024))
+    support_email = Column(String(1024))
+    windows = Column(Boolean)
+    mac = Column(Boolean)
+    linux = Column(Boolean)
+    metacritic_score = Column(Integer)
+    metacritic_url = Column(String(1024))
+    user_score = Column(Integer)
+    positive = Column(Integer)
+    negative = Column(Integer)
+    score_rank = Column(BigInteger)
+    achievements = Column(Integer)
+    recommendations = Column(Integer)
+    notes = Column(TEXT)
+    average_playtime_forever = Column(Integer)
+    average_playtime_two_weeks = Column(Integer)
+    median_playtime_forever = Column(Integer)
+    median_playtime_two_weeks = Column(Integer)
+    developers = Column(String(1024))
+    publishers = Column(String(1024))
+    categories = Column(String(1024))
+    genres = Column(String(1024))
+    tags = Column(String(1024))
+    screenshots = Column(TEXT)
+    movies = Column(TEXT)
+
+Base.metadata.create_all(engine)
+Session = sessionmaker(bind=engine)
+with Session() as session:
+    dataset = {}
+    if os.path.exists('games.json'):
+        with open('games.json', 'r', encoding='utf-8') as fin:
+            text = fin.read()
+            if len(text) > 0:
+                dataset = json.loads(text)
+
+    for app in dataset:
+        appID = app  # AppID, unique identifier for each app (string).
+        game = dataset[app]
+
+        name = game['name']  # Game name (string).
+        try:
+            releaseDateTime = time.strptime(game['release_date'], '%b %d, %Y')
+        except ValueError:
+            try:
+                releaseDateTime = time.strptime(game['release_date'], '%b %Y')
+            except ValueError:
+                releaseDateTime = time.strptime(game['release_date'], '%Y-%m-%d')
+
+        releaseDate = f'{releaseDateTime.tm_year}-{releaseDateTime.tm_mon}-{releaseDateTime.tm_mday}'
+        estimatedOwners = game['estimated_owners']  # Estimated owners (string, e.g.: "0 - 20000").
+        peakCCU = game['peak_ccu']  # Number of concurrent users, yesterday (int).
+        required_age = game['required_age']  # Age required to play, 0 if it is for all audiences (int).
+        price = game['price']  # Price in USD, 0.0 if its free (float).
+        dlcCount = game['dlc_count']  # Number of DLCs, 0 if you have none (int).
+        shortDesc = game['short_description']  # Brief description of the game,
+        languages = json.dumps(game['supported_languages'])  # Comma-separated enumeration of supporting languages.
+        fullAudioLanguages = json.dumps(game['full_audio_languages'])
+        reviews = game['reviews']
+        headerImage = game['header_image']  # Header image URL in the store (string).
+        website = game['website']  # Game website (string).
+        supportWeb = game['support_url']  # Game support URL (string).
+        supportEmail = game['support_email']  # Game support email (string).
+        supportWindows = game['windows']  # Does it support Windows? (bool).
+        supportMac = game['mac']  # Does it support Mac? (bool).
+        supportLinux = game['linux']  # Does it support Linux? (bool).
+        metacriticScore = game['metacritic_score']  # Metacritic score, 0 if it has none (int).
+        metacriticURL = game['metacritic_url']  # Metacritic review URL (string).
+        userScore = game['user_score']  # Users score, 0 if it has none (int).
+        positive = game['positive']  # Positive votes (int).
+        negative = game['negative']  # Negative votes (int).
+        scoreRank = None
+        if game['score_rank'] != "": scoreRank = game['score_rank']
+        achievements = game['achievements']  # Number of achievements, 0 if it has none (int).
+        recommens = game['recommendations']  # User recommendations, 0 if it has none (int).
+        notes = game['notes']  # Extra information about the game content (string).
+        averagePlaytime = game['average_playtime_forever']  # Average playtime since March 2009, in minutes (int).
+        averageplaytime2W = game['average_playtime_2weeks']  # Average playtime in the last two weeks, in minutes (int).
+        medianPlaytime = game['median_playtime_forever']  # Median playtime since March 2009, in minutes (int).
+        medianPlaytime2W = game['median_playtime_2weeks']  # Median playtime in the last two weeks, in minutes (int).
+        developers = json.dumps(game['developers'])
+        publishers = json.dumps(game['publishers'])
+        categories = json.dumps(game['categories'])
+        genres = json.dumps(game['genres'])
+        screenshots = json.dumps(game['screenshots'])
+        movies = json.dumps(game['movies'])
+        tags = json.dumps(game['tags'])
+
+        session.add(Games(
+            app_id=appID,
+            name=name,
+            release_date=releaseDate,
+            estimated_owners=estimatedOwners,
+            peak_ccu=peakCCU,
+            required_age=required_age,
+            price=price,
+            dlc_count=dlcCount,
+            short_description=shortDesc,
+            supported_languages=languages,
+            full_audio_languages=fullAudioLanguages,
+            reviews=reviews,
+            header_image=headerImage,
+            website=website,
+            support_url=supportWeb,
+            support_email=supportEmail,
+            windows=supportWindows,
+            mac=supportMac,
+            linux=supportLinux,
+            metacritic_score=metacriticScore,
+            metacritic_url=metacriticURL,
+            user_score=userScore,
+            positive=positive,
+            negative=negative,
+            score_rank=scoreRank,
+            achievements=achievements,
+            recommendations=recommens,
+            notes=notes,
+            average_playtime_forever=averagePlaytime,
+            average_playtime_two_weeks=averageplaytime2W,
+            median_playtime_forever=medianPlaytime,
+            median_playtime_two_weeks=medianPlaytime2W,
+            developers=developers,
+            publishers=publishers,
+            categories=categories,
+            genres=genres,
+            screenshots=screenshots,
+            movies=movies,
+            tags=tags
+        ))
+
+        session.commit()
+```
+
+## [Entity] company / [Relation] developer / [Relation] publisher
+
+```python
+from sqlalchemy import create_engine, String, Column, Integer, \
+    DateTime, Numeric, TEXT, Boolean, BigInteger, select, func
+from sqlalchemy.orm import declarative_base, sessionmaker
+import os
+import json
+
+engine = create_engine('mysql://root:@127.0.0.1:4000/test')
+Base = declarative_base()
+
+class Company(Base):
+    __tablename__ = "company"
+
+    company_id = Column(Integer, primary_key=True)
+    company_name = Column(String(256))
+
+class Developer(Base):
+    __tablename__ = "developer"
+
+    app_id = Column(Integer, primary_key=True)
+    company_id = Column(Integer, primary_key=True)
+
+class Publisher(Base):
+    __tablename__ = "publisher"
+
+    app_id = Column(Integer, primary_key=True)
+    company_id = Column(Integer, primary_key=True)
+
+Base.metadata.create_all(engine)
+Session = sessionmaker(bind=engine)
+
+def add_company_and_return_id(session, company_map, company_name):
+    if company_map.get(company_name) is None:
+        company_id = session.query(func.max(Company.company_id)).scalar()
+        if company_id is None:
+            company_id = 0
+        company_id += 1
+        company = Company(company_id=company_id, company_name=company_name)
+        company_map[company_name] = company_id
+        session.add(company)
+        session.commit()
+    return company_map.get(company_name)
+
+with Session() as session:
+    dataset = {}
+    if os.path.exists('games.json'):
+        with open('games.json', 'r', encoding='utf-8') as fin:
+            text = fin.read()
+            if len(text) > 0:
+                dataset = json.loads(text)
+    index = 0
+    companyMap = {}
+
+    for app in dataset:
+        appID = app
+        game = dataset[app]
+        developers = game['developers']
+        publishers = game['publishers']
+
+        if developers is not None:
+            devSet = {}
+            for developer in developers:
+                company_id = add_company_and_return_id(session, companyMap, developer)
+                if devSet.get(f"{appID}/{company_id}") is not None:
+                    continue
+                developer = Developer(app_id=appID, company_id=company_id)
+                session.add(developer)
+                devSet[f"{developer.app_id}/{developer.company_id}"] = True
+
+        if publishers is not None:
+            pubSet = {}
+            for publisher in publishers:
+                company_id = add_company_and_return_id(session, companyMap, publisher)
+                if pubSet.get(f"{appID}/{company_id}") is not None:
+                    continue
+                publisher = Publisher(app_id=appID, company_id=company_id)
+                session.add(publisher)
+                pubSet[f"{publisher.app_id}/{publisher.company_id}"] = True
+
+        session.commit()
+        index += 1
+        if index % 100 == 0:
+            print(f'[{index}/68223] {game["name"]}')
+
+```
+
+## [Entity] language / [Relation] supported_language / [Relation] all_audio_language
+
+```python
+from sqlalchemy import create_engine, String, Column, Integer, \
+    DateTime, Numeric, TEXT, Boolean, BigInteger, select, func
+from sqlalchemy.orm import declarative_base, sessionmaker
+import os
+import json
+
+engine = create_engine('mysql://root:@127.0.0.1:4000/test')
+Base = declarative_base()
+
+class Language(Base):
+    __tablename__ = "language"
+
+    language_id = Column(Integer, primary_key=True)
+    language_name = Column(String(256))
+
+class SupportedLanguage(Base):
+    __tablename__ = "supported_language"
+
+    app_id = Column(Integer, primary_key=True)
+    language_id = Column(Integer, primary_key=True)
+
+class AllAudioLanguage(Base):
+    __tablename__ = "all_audio_language"
+
+    app_id = Column(Integer, primary_key=True)
+    language_id = Column(Integer, primary_key=True)
+
+Base.metadata.create_all(engine)
+Session = sessionmaker(bind=engine)
+
+with Session() as session:
+    dataset = {}
+    if os.path.exists('games.json'):
+        with open('games.json', 'r', encoding='utf-8') as fin:
+            text = fin.read()
+            if len(text) > 0:
+                dataset = json.loads(text)
+
+    index = 0
+    languageMap = {}
+
+    for app in dataset:
+        appID = app
+        game = dataset[app]
+        languages = game['supported_languages']
+        fullAudioLanguages = game['full_audio_languages']
+
+        if languages is not None:
+            for language in languages:
+                languageName = language
+                if languageMap.get(languageName) is None:
+                    languageID = session.query(func.max(Language.language_id)).scalar()
+                    if languageID is None:
+                        languageID = 0
+                    languageID += 1
+                    language = Language(language_id=languageID, language_name=languageName)
+                    session.add(language)
+                    languageMap[languageName] = languageID
+
+                supportedLanguage = SupportedLanguage(app_id=appID, language_id=languageMap.get(languageName))
+                session.add(supportedLanguage)
+
+        if fullAudioLanguages is not None:
+            for language in fullAudioLanguages:
+                languageName = language
+                if languageMap.get(languageName) is None:
+                    languageID = session.query(func.max(Language.language_id)).scalar()
+                    if languageID is None:
+                        languageID = 0
+                    languageID += 1
+                    language = Language(language_id=languageID, language_name=languageName)
+                    session.add(language)
+                    languageMap[languageName] = languageID
+
+                allAudioLanguage = AllAudioLanguage(app_id=appID, language_id=languageMap.get(languageName))
+                session.add(allAudioLanguage)
+
+        session.commit()
+        index += 1
+        print(f'[{index}/68223] {game["name"]}')
+
+```
+
+## [Entity] category / [Relation] game_category
+
+```python
+from sqlalchemy import create_engine, String, Column, Integer, \
+    DateTime, Numeric, TEXT, Boolean, BigInteger, select, func
+from sqlalchemy.orm import declarative_base, sessionmaker
+import os
+import json
+
+engine = create_engine('mysql://root:@127.0.0.1:4000/test')
+Base = declarative_base()
+
+class Category(Base):
+    __tablename__ = "category"
+
+    category_id = Column(Integer, primary_key=True)
+    category_name = Column(String(256))
+
+class GameCategory(Base):
+    __tablename__ = "game_category"
+
+    app_id = Column(Integer, primary_key=True)
+    category_id = Column(Integer, primary_key=True)
+
+Base.metadata.create_all(engine)
+Session = sessionmaker(bind=engine)
+
+with Session() as session:
+    dataset = {}
+    if os.path.exists('games.json'):
+        with open('games.json', 'r', encoding='utf-8') as fin:
+            text = fin.read()
+            if len(text) > 0:
+                dataset = json.loads(text)
+    index = 0
+    categoryMap = {}
+
+    for app in dataset:
+        appID = app
+        game = dataset[app]
+        categories = game['categories']
+        catSet = {}
+
+        for category in categories:
+            categoryID = categoryMap.get(category)
+            if categoryID is None:
+                categoryID = len(categoryMap) + 1
+                categoryMap[category] = categoryID
+                session.add(Category(category_id=categoryID, category_name=category))
+            if catSet.get(f"{appID}/{categoryID}") is not None:
+                continue
+
+            session.add(GameCategory(app_id=appID, category_id=categoryID))
+            catSet[f"{appID}/{categoryID}"] = True
+
+        session.commit()
+
+        index += 1
+        if index % 100 == 0:
+            print(f'[{index}/68223]')
+```
+
+## [Entity] genre / [Relation] game_genre
+
+```python
+from sqlalchemy import create_engine, String, Column, Integer, \
+    DateTime, Numeric, TEXT, Boolean, BigInteger, select, func
+from sqlalchemy.orm import declarative_base, sessionmaker
+import os
+import json
+
+engine = create_engine('mysql://root:@127.0.0.1:4000/test')
+Base = declarative_base()
+
+class Genre(Base):
+    __tablename__ = "genre"
+
+    genre_id = Column(Integer, primary_key=True)
+    genre_name = Column(String(256))
+
+class GameGenre(Base):
+    __tablename__ = "game_genre"
+
+    app_id = Column(Integer, primary_key=True)
+    genre_id = Column(Integer, primary_key=True)
+
+Base.metadata.create_all(engine)
+Session = sessionmaker(bind=engine)
+
+with Session() as session:
+    dataset = {}
+    if os.path.exists('games.json'):
+        with open('games.json', 'r', encoding='utf-8') as fin:
+            text = fin.read()
+            if len(text) > 0:
+                dataset = json.loads(text)
+    index = 0
+    genreMap = {}
+
+    for app in dataset:
+        appID = app
+        game = dataset[app]
+        genres = game['genres']
+        for genre in genres:
+            genreID = genreMap.get(genre)
+            if genreID is None:
+                genreID = len(genreMap) + 1
+                genreMap[genre] = genreID
+                session.add(Genre(genre_id=genreID, genre_name=genre))
+            session.add(GameGenre(app_id=appID, genre_id=genreID))
+        session.commit()
+
+        index += 1
+        if index % 100 == 0:
+            print(f'[{index}/68223]')
+
+```
+
+## [Entity] tag / [Relation] game_tag
+
+```python
+from sqlalchemy import create_engine, String, Column, Integer, \
+    DateTime, Numeric, TEXT, Boolean, BigInteger, select, func
+from sqlalchemy.orm import declarative_base, sessionmaker
+import os
+import json
+
+engine = create_engine('mysql://root:@127.0.0.1:4000/test')
+Base = declarative_base()
+
+class Tag(Base):
+    __tablename__ = "tag"
+
+    tag_id = Column(Integer, primary_key=True)
+    tag_name = Column(String(256))
+
+class GameTag(Base):
+    __tablename__ = "game_tag"
+
+    app_id = Column(Integer, primary_key=True)
+    tag_id = Column(Integer, primary_key=True)
+    agree_num = Column(Integer)
+
+Base.metadata.create_all(engine)
+Session = sessionmaker(bind=engine)
+
+with Session() as session:
+    dataset = {}
+    if os.path.exists('games.json'):
+        with open('games.json', 'r', encoding='utf-8') as fin:
+            text = fin.read()
+            if len(text) > 0:
+                dataset = json.loads(text)
+    index = 0
+    tagMap = {}
+
+    for app in dataset:
+        appID = app
+        game = dataset[app]
+        tags = game['tags']
+
+        for tag in tags:
+            tagID = tagMap.get(tag)
+            if tagID is None:
+                tagID = len(tagMap) + 1
+                tagMap[tag] = tagID
+                session.add(Tag(tag_id=tagID, tag_name=tag))
+
+            session.add(GameTag(app_id=appID, tag_id=tagID, agree_num=tags[tag]))
+
+        session.commit()
+
+        index += 1
+        if index % 100 == 0:
+            print(f'[{index}/68223]')
+```
+
+## Remove the redundant columns from the main table
+
+That's optional.
+
+export default ({ children }) => (
+  <Layout
+    headerProps={{
+      title: "Data Cleaning",
+    }}
+    markdown
+  >
+    {children}
+  </Layout>
+);

@@ -38,7 +38,6 @@ export const LEFT_NAV_ITEMS: LeftNavConfigItemProps[] = [
       </SvgIcon>
     ),
     href: "/background",
-    disabled: true,
   },
   {
     id: "data-cleaning",
@@ -49,7 +48,6 @@ export const LEFT_NAV_ITEMS: LeftNavConfigItemProps[] = [
       </SvgIcon>
     ),
     href: "/data-cleaning",
-    disabled: true,
   },
   {
     id: "comphrehensive",
@@ -60,6 +58,5 @@ export const LEFT_NAV_ITEMS: LeftNavConfigItemProps[] = [
       </SvgIcon>
     ),
     href: "/comprehensive",
-    disabled: true,
   },
 ];
