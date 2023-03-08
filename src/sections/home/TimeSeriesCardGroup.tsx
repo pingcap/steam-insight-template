@@ -739,27 +739,19 @@ ORDER BY num DESC
 export default function TimeSeriesCardGroup() {
   return (
     <>
-      <Grid
-        container
-        spacing={2}
-        sx={{
-          overflow: "auto",
-        }}
-      >
-        {MOCK_DATA.map((item) => (
-          <Grid key={item.title} xs={12} md={6}>
-            <TimeSeriesCardTemplate
-              title={item.title}
-              data={item.data.sort((a, b) =>
-                a.release_year > b.release_year ? 1 : -1
-              )}
-              multiLineField={item.field}
-              syncId={item.syncId}
-              sql={item.sql}
-            />
-          </Grid>
-        ))}
-      </Grid>
+      {MOCK_DATA.map((item) => (
+        <Grid key={item.title} xs={12} md={6}>
+          <TimeSeriesCardTemplate
+            title={item.title}
+            data={item.data.sort((a, b) =>
+              a.release_year > b.release_year ? 1 : -1
+            )}
+            multiLineField={item.field}
+            // syncId={item.syncId}
+            sql={item.sql}
+          />
+        </Grid>
+      ))}
     </>
   );
 }
@@ -814,7 +806,7 @@ const TimeSeriesCardTemplate = (props: {
         xDataKey={XAXIS_KEY_NAME}
         data={dataDemo}
         lines={linesMemo}
-        syncId={syncId}
+        // syncId={syncId}
       />
     </ChartCardTemplate>
   );

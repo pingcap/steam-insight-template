@@ -14,6 +14,7 @@ import {
   useMediaQuery,
   Container,
   Typography,
+  Unstable_Grid2 as Grid,
 } from "@mui/material";
 
 import Layout from "@/components/Layout";
@@ -34,9 +35,16 @@ export default function Home() {
           title: "Data Insight",
         }}
       >
-        {/* <Typography variant="h1">Overview</Typography> */}
-        <TimeSeriesCardGroup />
-        <TopTenCardGroup />
+        <Grid
+          container
+          spacing={2}
+          sx={{
+            overflow: "auto",
+          }}
+        >
+          <TimeSeriesCardGroup />
+          <TopTenCardGroup />
+        </Grid>
       </Layout>
     </>
   );

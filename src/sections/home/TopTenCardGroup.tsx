@@ -131,26 +131,18 @@ LIMIT 10`,
 export default function TopTenCardGroup(props: {}) {
   return (
     <>
-      <Grid
-        container
-        spacing={2}
-        sx={{
-          overflow: "auto",
-        }}
-      >
-        {MOCK_DATA.map((item) => (
-          <Grid key={item.title} xs={12} md={6}>
-            <TopTenCardTemplate
-              title={item.title}
-              data={item.data}
-              x={item.x}
-              y={item.y}
-              // syncId={item.syncId}
-              sql={item.sql}
-            />
-          </Grid>
-        ))}
-      </Grid>
+      {MOCK_DATA.map((item) => (
+        <Grid key={item.title} xs={12} md={6}>
+          <TopTenCardTemplate
+            title={item.title}
+            data={item.data}
+            x={item.x}
+            y={item.y}
+            // syncId={item.syncId}
+            sql={item.sql}
+          />
+        </Grid>
+      ))}
     </>
   );
 }
