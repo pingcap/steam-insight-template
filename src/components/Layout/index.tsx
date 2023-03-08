@@ -15,15 +15,17 @@ import { alpha } from "@mui/material/styles";
 import Header, { HeaderProps } from "@/components/Layout/Header";
 import SEO from "@/components/Layout/SEO";
 import LeftNav, { LeftNavBtn } from "@/components/Layout/LeftNav";
+import MarkdownContainer from "@/components/Layout/MarkdownContainer";
 import { TOP_NAV_HEIGHT, SIDE_NAV_WIDTH } from "@/utils/constants";
 
 export interface LayoutProps {
   children: React.ReactNode;
   headerProps?: HeaderProps;
+  markdown?: boolean;
 }
 
 export default function Layout(props: LayoutProps) {
-  const { headerProps } = props;
+  const { headerProps, markdown } = props;
 
   const [leftNavOpen, setLeftNavOpen] = React.useState(false);
 
@@ -66,11 +68,15 @@ export default function Layout(props: LayoutProps) {
         <Container
           sx={
             {
-              // minHeight: `calc(100vh - ${TOP_NAV_HEIGHT}px)`,
+              minHeight: `calc(100vh - ${TOP_NAV_HEIGHT * 2}px)`,
             }
           }
         >
-          {props.children}
+          {markdown ? (
+            <MarkdownContainer>{props.children}</MarkdownContainer>
+          ) : (
+            <>{props.children}</>
+          )}
         </Container>
       </Box>
     </>

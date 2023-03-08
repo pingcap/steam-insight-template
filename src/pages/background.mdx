@@ -1,0 +1,22 @@
+import Layout from "@/components/Layout";
+
+This game dataset stands for [Steam](https://store.steampowered.com/)'s data. [Kaggle](https://www.kaggle.com/datasets/fronkongames/steam-games-dataset) offers two types of data, [CSV](https://www.kaggle.com/datasets/fronkongames/steam-games-dataset?select=games.csv) and [Json](https://www.kaggle.com/datasets/fronkongames/steam-games-dataset?select=games.json).
+
+But the data organized way is the document model. We need to transcript it to the relational model.
+
+When I analyzed it, I found CSV format lacked a lot of information. So the final way is:
+
+- Using Python to read Json data, using [SQLAlchemy](https://docs.sqlalchemy.org/en/14/core/type_basics.html) to create and save the data model. This data model is raw type, which means we store the list, map, and struct as the varchar type in the database.
+- Then, try to follow the [third normal form](https://en.wikipedia.org/wiki/Third_normal_form) (3NF) to expand the many-to-many relationship
+- Clean the table
+
+export default ({ children }) => (
+  <Layout
+    headerProps={{
+      title: "Background",
+    }}
+    markdown
+  >
+    {children}
+  </Layout>
+);
