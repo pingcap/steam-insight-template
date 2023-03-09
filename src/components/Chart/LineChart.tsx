@@ -46,10 +46,10 @@ export interface LineChartProps {
   width?: number;
   height?: number;
   margin?: {
-    top: number;
-    right: number;
-    left: number;
-    bottom: number;
+    top?: number;
+    right?: number;
+    left?: number;
+    bottom?: number;
   };
   disableCartesianGrid?: boolean;
   cartesianGridProps?: {
