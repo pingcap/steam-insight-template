@@ -7,8 +7,9 @@ export default function ChartCardTemplate(props: {
   title: string;
   sql?: string;
   children: React.ReactNode;
+  height?: number;
 }) {
-  const { title, sql, children } = props;
+  const { title, sql, children, height } = props;
 
   return (
     <Card
@@ -31,7 +32,7 @@ export default function ChartCardTemplate(props: {
         </Box>
         <Box
           sx={{
-            height: 300,
+            height: height || 300,
             mt: 2,
 
             "& *": {

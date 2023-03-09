@@ -157,7 +157,7 @@ function TopTenCardTemplate(props: {
   const { title, sql, data, x, y } = props;
 
   return (
-    <ChartCardTemplate title={title} sql={sql}>
+    <ChartCardTemplate title={title} sql={sql} height={500}>
       <DynamicBarChart data={data} xDataKey={x} barDataKey={y} />
     </ChartCardTemplate>
   );

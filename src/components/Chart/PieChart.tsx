@@ -108,8 +108,8 @@ export default function PieChartComponent(props: PieChartProps) {
           nameKey={xDataKey}
           cx="50%"
           cy="50%"
-          innerRadius={70}
-          outerRadius={90}
+          innerRadius={100}
+          outerRadius={120}
           // fill="#82ca9d"
           // label
           activeIndex={activeIndex}
@@ -123,9 +123,27 @@ export default function PieChartComponent(props: PieChartProps) {
             />
           ))}
         </Pie>
-        <Legend />
+        <Legend
+          formatter={renderPercentageLegendText}
+          // wrapperStyle={{
+          //   left: 0,
+          //   top: 0,
+          //   bottom: `auto`,
+          //   width: 200,
+          // }}
+        />
         {/* <Tooltip /> */}
       </PieChart>
     </ResponsiveContainer>
   );
 }
+
+const renderPercentageLegendText = (value: string, entry: any) => {
+  const { color, payload } = entry;
+
+  return (
+    <span style={{ color }}>{`${value}(${(payload.percent * 100).toFixed(
+      2
+    )}%)`}</span>
+  );
+};

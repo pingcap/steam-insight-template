@@ -12,6 +12,7 @@ import {
 } from "recharts";
 
 import { stringToColor, nFormatter } from "@/utils";
+import { CustomizedAxisTick } from "@/components/Chart/Components";
 
 export interface BarChartProps {
   data: { [key: string]: string | number | undefined }[];
@@ -36,7 +37,12 @@ export default function BarChartComponent(props: BarChartProps) {
         }}
       >
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey={xDataKey} />
+        <XAxis
+          dataKey={xDataKey}
+          tick={<CustomizedAxisTick />}
+          height={120}
+          interval={0}
+        />
         <YAxis
           // scale="log"
           // label={{

@@ -10,6 +10,8 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
+import { CustomizedAxisTick } from "@/components/Chart/Components";
+
 export interface ChartLine {
   dataKey: string;
   stroke: string;
@@ -61,7 +63,12 @@ export default function LineChartComponent(props: LineChartProps) {
         syncId={syncId}
       >
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey={xDataKey || "name"} />
+        <XAxis
+          dataKey={xDataKey || "name"}
+          tick={CustomizedAxisTick}
+          height={50}
+          // interval={0}
+        />
         <YAxis />
         <Tooltip
           itemSorter={(i) => {

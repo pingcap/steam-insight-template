@@ -90,7 +90,7 @@ function PieCardTemplate(props: {
   const { title, sql, data, x, y } = props;
 
   return (
-    <ChartCardTemplate title={title} sql={sql}>
+    <ChartCardTemplate title={title} sql={sql} height={500}>
       <DynamicPieChart data={data} dataKey={y} xDataKey={x}  />
     </ChartCardTemplate>
   );
