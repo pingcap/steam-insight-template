@@ -66,7 +66,7 @@ export default function PieCardGroup(props: {}) {
   return (
     <>
       {MOCK_DATA.map((item) => (
-        <Grid key={item.title} xs={12} md={6}>
+        <Grid key={item.title} xs={12} >
           <PieCardTemplate
             title={item.title}
             data={item.data}

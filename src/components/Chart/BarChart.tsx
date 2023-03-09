@@ -11,7 +11,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-import { stringToColor } from "@/utils";
+import { stringToColor, nFormatter } from "@/utils";
 
 export interface BarChartProps {
   data: { [key: string]: string | number | undefined }[];
@@ -37,7 +37,22 @@ export default function BarChartComponent(props: BarChartProps) {
       >
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey={xDataKey} />
-        <YAxis />
+        <YAxis
+          // scale="log"
+          // label={{
+          //   value: "Collision Probability / -",
+          //   position: "insideLeft",
+          //   angle: -90,
+          //   dx: -3,
+          //   fill: "#808080",
+          //   dy: 70,
+          //   fontSize: "105%",
+          // }}
+          // domain={['0', 'auto']}
+          // type="number"
+          tickFormatter={(value) => `${nFormatter(value, 1)}`}
+          dataKey={barDataKey}
+        />
         <Tooltip />
         <Bar dataKey={barDataKey} fill={stringToColor(barDataKey)} />
       </BarChart>
