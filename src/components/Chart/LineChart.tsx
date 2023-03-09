@@ -10,7 +10,10 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-import { CustomizedAxisTick } from "@/components/Chart/Components";
+import {
+  CustomizedAxisTick,
+  CommonChartProps,
+} from "@/components/Chart/Common";
 
 export interface ChartLine {
   dataKey: string;
@@ -35,33 +38,13 @@ export interface ChartLine {
   dot?: boolean;
 }
 
-export interface LineChartProps {
+export interface LineChartProps extends CommonChartProps {
   xDataKey?: string;
   data: {
     name?: string;
     [key: string]: string | number | undefined;
   }[];
   lines: ChartLine[];
-  syncId?: string;
-  width?: number;
-  height?: number;
-  margin?: {
-    top?: number;
-    right?: number;
-    left?: number;
-    bottom?: number;
-  };
-  disableCartesianGrid?: boolean;
-  cartesianGridProps?: {
-    stroke?: string;
-  };
-  xAxisProps?: {
-    tick?: any;
-    height?: number;
-  };
-  yAxisProps?: {};
-  tooltipProps?: {};
-  legendProps?: {};
 }
 
 export default function LineChartComponent(props: LineChartProps) {

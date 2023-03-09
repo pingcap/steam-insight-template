@@ -12,33 +12,15 @@ import {
 } from "recharts";
 
 import { stringToColor, nFormatter } from "@/utils";
-import { CustomizedAxisTick } from "@/components/Chart/Components";
+import {
+  CustomizedAxisTick,
+  CommonChartProps,
+} from "@/components/Chart/Common";
 
-export interface BarChartProps {
+export interface BarChartProps extends CommonChartProps {
   data: { [key: string]: string | number | undefined }[];
   xDataKey: string;
   barDataKey: string;
-  width?: number;
-  height?: number;
-  margin?: {
-    top?: number;
-    right?: number;
-    left?: number;
-    bottom?: number;
-  };
-  disableCartesianGrid?: boolean;
-  cartesianGridProps?: {
-    stroke?: string;
-  };
-  xAxisProps?: {
-    tick?: any;
-    height?: number;
-    interval?: number;
-  };
-  yAxisProps?: {
-    tickFormatter?: (value: number) => string;
-  };
-  tooltipProps?: {};
 }
 
 export default function BarChartComponent(props: BarChartProps) {
