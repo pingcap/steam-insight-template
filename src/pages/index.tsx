@@ -21,6 +21,7 @@ import Layout from "@/components/Layout";
 import TimeSeriesCardGroup from "@/sections/home/TimeSeriesCardGroup";
 import TopTenCardGroup from "@/sections/home/TopTenCardGroup";
 import PieCardGroup from "@/sections/home/PieCardGroup";
+import GamePanelGroup from "@/sections/home/GamePanelGroup";
 
 export default function Home() {
   return (
@@ -43,6 +44,8 @@ export default function Home() {
             overflow: "auto",
           }}
         >
+          <GamePanelGroup />
+
           <TimeSeriesCardGroup />
           <TopTenCardGroup />
           <PieCardGroup />
