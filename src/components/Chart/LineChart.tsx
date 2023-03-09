@@ -43,46 +43,77 @@ export interface LineChartProps {
   }[];
   lines: ChartLine[];
   syncId?: string;
+  width?: number;
+  height?: number;
+  margin?: {
+    top: number;
+    right: number;
+    left: number;
+    bottom: number;
+  };
+  disableCartesianGrid?: boolean;
+  cartesianGridProps?: {
+    stroke?: string;
+  };
+  xAxisProps?: {
+    tick?: any;
+    height?: number;
+  };
+  yAxisProps?: {};
+  tooltipProps?: {};
+  legendProps?: {};
 }
 
 export default function LineChartComponent(props: LineChartProps) {
-  const { data, lines, xDataKey, syncId } = props;
+  const {
+    data,
+    lines,
+    xDataKey,
+    syncId,
+    width,
+    height,
+    margin,
+    disableCartesianGrid,
+    cartesianGridProps,
+    xAxisProps,
+    yAxisProps,
+    tooltipProps,
+    legendProps,
+  } = props;
 
   return (
     <ResponsiveContainer width="100%" height="100%">
       <LineChart
-        width={500}
-        height={300}
+        width={width || 500}
+        height={height || 300}
         data={data}
         margin={{
           top: 5,
           right: 30,
           // left: 20,
           bottom: 5,
+          ...margin,
         }}
         syncId={syncId}
       >
-        <CartesianGrid strokeDasharray="3 3" />
+        {!disableCartesianGrid && (
+          <CartesianGrid strokeDasharray="3 3" {...cartesianGridProps} />
+        )}
         <XAxis
           dataKey={xDataKey || "name"}
           tick={CustomizedAxisTick}
           height={50}
           // interval={0}
+          {...xAxisProps}
         />
-        <YAxis />
+        <YAxis {...yAxisProps} />
         <Tooltip
           itemSorter={(i) => {
             return -(i?.value || 1);
           }}
+          {...tooltipProps}
         />
-        {/* <Legend /> */}
-        {/* <Line
-        type="monotone"
-        dataKey="pv"
-        stroke="#8884d8"
-        activeDot={{ r: 8 }}
-      />
-      <Line type="monotone" dataKey="uv" stroke="#82ca9d" /> */}
+        {!!legendProps && <Legend {...legendProps} />}
         {lines.map((line) => (
           <Line
             key={line.dataKey}
