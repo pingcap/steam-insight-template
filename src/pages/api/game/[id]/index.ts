@@ -1,15 +1,16 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getLogger } from "@next-logger/logger";
 
-import { retriveGameListByName } from "@/services/game";
 import { NextApiResponseBody, NextApiResponseErrorBody } from "@/types";
+import { ALLOWED_GAME_FIELDS } from "@/services/game";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<NextApiResponseBody | NextApiResponseErrorBody>
 ) {
-  const logger = getLogger(`api/game`);
-  logger.info(`req.query.name: ${req.query.name}`);
+  const { id: gameId } = req.query;
+
+  const logger = getLogger(`api/game/${gameId}`);
 
   if (req.method !== "GET") {
     res.status(405).json({
@@ -20,21 +21,27 @@ export default async function handler(
     return;
   }
 
-  if (!req.query.name) {
+  if (
+    !req.query.type ||
+    !ALLOWED_GAME_FIELDS.find((f) => f.id === req.query.type)
+  ) {
     res.status(400).json({
       message: "Bad request",
       timestamp: new Date().getTime(),
-      error: "name is required",
+      error:
+        "type is required, and must be one of: " +
+        ALLOWED_GAME_FIELDS.map((f) => f.id).join(","),
     });
     return;
   }
 
   // TODO: retrive game data from database
-  const result = retriveGameListByName(req.query.name as string);
 
   res.status(200).json({
     message: "OK",
     timestamp: new Date().getTime(),
-    data: result,
+    data: ALLOWED_GAME_FIELDS.find((f) => f.id === req.query.type)?.getSql(
+      `${gameId}`
+    ),
   });
 }

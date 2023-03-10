@@ -40,3 +40,63 @@ export function retriveGameListByName(name: string) {
 
   return MOCK_GAME_LIST;
 }
+
+export const ALLOWED_GAME_FIELDS = [
+  {
+    id: "developer",
+    field: "developer",
+    getSql: (app_id: string) => `SELECT c.company_name
+FROM developer d
+LEFT JOIN company c ON c.company_id = d.company_id
+WHERE d.app_id = ${app_id}`,
+  },
+  {
+    id: "publisher",
+    field: "publisher",
+    getSql: (app_id: string) => `SELECT c.company_name
+FROM publisher p
+LEFT JOIN company c ON c.company_id = p.company_id
+WHERE p.app_id = ${app_id}`,
+  },
+  {
+    id: "genres",
+    field: "game_genre",
+    getSql: (app_id: string) => `SELECT g.genre_name 
+FROM game_genre gg 
+LEFT JOIN genre g ON g.genre_id = gg.genre_id 
+WHERE gg.app_id = ${app_id}`,
+  },
+  {
+    id: "categories",
+    field: "game_category",
+    getSql: (app_id: string) => `
+    SELECT c.category_name 
+FROM game_category gc
+LEFT JOIN category c ON gc.category_id  = c.category_id 
+WHERE gc.app_id = ${app_id}`,
+  },
+  {
+    id: "supported_languages",
+    field: "supported_language",
+    getSql: (app_id: string) => `SELECT l.language_name 
+FROM supported_language sl 
+LEFT JOIN \`language\` l ON l.language_id = sl.language_id 
+WHERE sl.app_id = ${app_id}`,
+  },
+  {
+    id: "all_audio_languages",
+    field: "all_audio_language",
+    getSql: (app_id: string) => `SELECT l.language_name 
+FROM all_audio_language aal 
+LEFT JOIN \`language\` l ON l.language_id = aal.language_id 
+WHERE aal.app_id = ${app_id}`,
+  },
+  {
+    id: "tags",
+    field: "game_tag",
+    getSql: (app_id: string) => `SELECT t.tag_name, gt.agree_num
+FROM game_tag gt 
+LEFT JOIN tag t ON t.tag_id = gt.tag_id 
+WHERE gt.app_id = ${app_id}`,
+  },
+];
