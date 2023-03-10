@@ -4,7 +4,7 @@ import { Box, Card, CardContent, Typography } from "@mui/material";
 export default function GamePanelCardTemplate(props: {
   title: string;
   children: React.ReactNode;
-  height?: number;
+  height?: number | string;
 }) {
   const { title, children, height } = props;
 

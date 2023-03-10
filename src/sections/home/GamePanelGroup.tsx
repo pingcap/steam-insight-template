@@ -24,7 +24,7 @@ export default function GamePanelGroup(props: {}) {
   return (
     <>
       <Grid xs={12}>
-        <GamePanelCardTemplate title="Game Panel">
+        <GamePanelCardTemplate title="Game Panel" height="auto">
           <Content />
         </GamePanelCardTemplate>
       </Grid>
@@ -32,8 +32,83 @@ export default function GamePanelGroup(props: {}) {
   );
 }
 
+const QueryGameIdBlock = () => {
+  const [gameName, setGameName] = React.useState<string>("");
+  const [selectedGame, setSelectedGame] = React.useState<{
+    name: string;
+    id: number;
+  } | null>(null);
+  const [loading, setLoading] = React.useState<boolean>(false);
+  const [result, setResult] = React.useState<any>(null);
+
+  const MOCK_GAME_NAME_SQL = `-- get the $\{app_id} from game.app_id
+SELECT * FROM games WHERE name = $\{game_name}`;
+
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // console.log(e.target.value);
+    setGameName(e.target.value || "");
+  };
+
+  const handleQuery = async () => {
+    setLoading(true);
+    try {
+      await sleep(2000);
+      setResult("result");
+    } catch (error) {
+      // TODO: handle error
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          gap: 2,
+        }}
+      >
+        <TextField
+          variant="outlined"
+          size="small"
+          placeholder="Input Game Name"
+          onChange={handleInput}
+          sx={{ width: 300 }}
+        />
+        <LoadingButton
+          size="small"
+          variant="contained"
+          endIcon={<PlayArrowIcon />}
+          disabled={!gameName}
+          loading={loading}
+          onClick={handleQuery}
+        >
+          Query
+        </LoadingButton>
+      </Box>
+      <Box
+        sx={{
+          height: "auto",
+          overflow: "auto",
+        }}
+      >
+        <CodeBlock
+          language="sql"
+          text={
+            selectedGame
+              ? MOCK_GAME_NAME_SQL.replaceAll("${app_id}", `${selectedGame.id}`)
+              : MOCK_GAME_NAME_SQL
+          }
+        />
+      </Box>
+      {result && <CodeBlock showLineNumbers={false} text={result} />}
+    </>
+  );
+};
+
 const Content = () => {
-  // const [gameName, setGameName] = React.useState<string>("");
   const [selectedGame, setSelectedGame] = React.useState<{
     name: string;
     id: number;
@@ -83,11 +158,6 @@ FROM game_tag gt
 LEFT JOIN tag t ON t.tag_id = gt.tag_id 
 WHERE gt.app_id = $\{app_id}`;
 
-  // const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   // console.log(e.target.value);
-  //   setGameName(e.target.value || "");
-  // };
-
   const handleQuery = async () => {
     setLoading(true);
     try {
@@ -108,6 +178,8 @@ WHERE gt.app_id = $\{app_id}`;
         gap: 2,
       }}
     >
+      <QueryGameIdBlock />
+
       <Box
         sx={{
           display: "flex",
@@ -115,12 +187,6 @@ WHERE gt.app_id = $\{app_id}`;
           gap: 2,
         }}
       >
-        {/* <TextField
-          variant="outlined"
-          size="small"
-          placeholder="Input Game Name"
-          onChange={handleInput}
-        /> */}
         <Autocomplete
           size="small"
           disablePortal
@@ -135,7 +201,7 @@ WHERE gt.app_id = $\{app_id}`;
           renderInput={(params) => (
             <TextField
               variant="outlined"
-              placeholder="Input Game Name"
+              placeholder="Choose Game ID"
               {...params}
             />
           )}
