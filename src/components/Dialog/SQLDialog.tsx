@@ -32,7 +32,7 @@ export default function SQLDialog(props: SQLDialogProps) {
       <Button size="small" onClick={handleClickOpen}>
         View SQL
       </Button>
-      <Dialog onClose={handleClose} open={open}>
+      <Dialog onClose={handleClose} open={open} disableScrollLock>
         <DialogTitle>{title}</DialogTitle>
         <DialogContent>
           <Box

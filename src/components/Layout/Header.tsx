@@ -38,6 +38,7 @@ export default function Header(props: HeaderProps) {
           },
           top: 0,
           width: {
+            xs: '100%',
             lg: `calc(100% - ${SIDE_NAV_WIDTH}px)`,
           },
           // width: "100%",
@@ -48,7 +49,7 @@ export default function Header(props: HeaderProps) {
           <Stack
             alignItems="center"
             direction="row"
-            justifyContent="space-between"
+            justifyContent="flex-start"
             spacing={2}
             sx={{
               minHeight: TOP_NAV_HEIGHT,
