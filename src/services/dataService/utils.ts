@@ -28,7 +28,7 @@ export async function fetchDataServiceAPI(
   query?: {
     [key: string]: string | number | boolean;
   },
-  isDraftEndpoint?: true
+  isDraftEndpoint?: boolean
 ): Promise<import("urllib").HttpClientResponse<any>> {
   const url = `${DATA_SERVICE_ENDPOINT}${servicePath}${resourcePath}`;
   const headers: {

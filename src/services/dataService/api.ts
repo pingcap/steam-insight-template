@@ -103,7 +103,8 @@ export class DataServiceHandler {
       const { data, res: dataServiceRes } = await fetchDataServiceAPI(
         this.targetRouteObj!.path,
         this.targetRoute!.path,
-        this.getQuery()
+        this.getQuery(),
+        true // draft mode
       );
       this.logger.info(`data: ${JSON.stringify(data)}, res: ${dataServiceRes}`);
       this.res.status(200).json({
