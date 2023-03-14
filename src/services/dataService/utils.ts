@@ -19,6 +19,13 @@ export function getRouteBySlug(
   routes: RouteItemType[]
 ): RouteItemType | undefined {
   const path = slug2path(slug);
+  return getRouteByPath(path, routes);
+}
+
+export function getRouteByPath(
+  path: string,
+  routes: RouteItemType[]
+): RouteItemType | undefined {
   return routes.find((route) => route.path === path);
 }
 

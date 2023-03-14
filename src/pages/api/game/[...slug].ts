@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { NextApiResponseBody, NextApiResponseErrorBody } from "@/types";
-import { DataServiceHandler } from "@/services/dataService/api";
+import { DataServiceTPHandler } from "@/services/dataService/api";
 
 const rootRoute = `game`;
 
@@ -9,7 +9,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<NextApiResponseBody | NextApiResponseErrorBody>
 ) {
-  const routeHandler = new DataServiceHandler(req, res, rootRoute);
+  const routeHandler = new DataServiceTPHandler(req, res, rootRoute);
 
   if (!routeHandler.validateRoute()) {
     return;
@@ -18,5 +18,5 @@ export default async function handler(
     return;
   }
 
-  routeHandler.fetchData();
+  routeHandler.fetchAPI();
 }
