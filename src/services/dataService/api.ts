@@ -108,7 +108,7 @@ export class DataServiceHandler {
       );
       this.logger.info(`data: ${JSON.stringify(data)}, res: ${dataServiceRes}`);
       this.res.status(200).json({
-        message: "Hello from api",
+        message: "OK",
         time: new Date().toISOString(),
         timestamp: new Date().getTime(),
         data,
