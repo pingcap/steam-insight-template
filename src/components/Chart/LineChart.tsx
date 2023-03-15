@@ -15,6 +15,8 @@ import {
   CommonChartProps,
 } from "@/components/Chart/Common";
 
+import { stringToColor, nFormatter } from "@/utils";
+
 export interface ChartLine {
   dataKey: string;
   stroke: string;
@@ -89,7 +91,10 @@ export default function LineChartComponent(props: LineChartProps) {
           // interval={0}
           {...xAxisProps}
         />
-        <YAxis {...yAxisProps} />
+        <YAxis
+          tickFormatter={(value) => `${nFormatter(value, 1)}`}
+          {...yAxisProps}
+        />
         <Tooltip
           itemSorter={(i) => {
             return -(i?.value || 1);

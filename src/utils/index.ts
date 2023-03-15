@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 /**
  * Convert a string to a color
  * @param {string} string
@@ -53,4 +55,8 @@ export function nFormatter(num: number, digits: number) {
 
 export async function sleep(miliseconds: number) {
   return new Promise((resolve) => setTimeout(resolve, miliseconds));
+}
+
+export function str2num(str: string) {
+  return _.toNumber(str);
 }

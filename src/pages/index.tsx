@@ -22,8 +22,14 @@ import TimeSeriesCardGroup from "@/sections/home/TimeSeriesCardGroup";
 import TopTenCardGroup from "@/sections/home/TopTenCardGroup";
 import PieCardGroup from "@/sections/home/PieCardGroup";
 import GamePanelGroup from "@/sections/home/GamePanelGroup";
+import CardGroup from "@/sections/home/CardGroup";
 
-export default function Home() {
+import { apRoutes } from "@/services/dataService/routes";
+import { DataServiceApiHandler } from "@/services/dataService";
+
+export default function Home(props: { ap: { id: string; data: any }[] }) {
+  const { ap } = props;
+
   return (
     <>
       {/* <Head>
@@ -44,13 +50,33 @@ export default function Home() {
             overflow: "auto",
           }}
         >
+          <CardGroup data={ap} />
           <GamePanelGroup />
 
-          <TimeSeriesCardGroup />
+          {/* <TimeSeriesCardGroup />
           <TopTenCardGroup />
-          <PieCardGroup />
+          <PieCardGroup /> */}
         </Grid>
       </Layout>
     </>
   );
+}
+
+export async function getStaticProps() {
+  const apResults = [];
+  for (const route of apRoutes) {
+    const dataServiceApi = new DataServiceApiHandler(`ap`, route.path);
+    const { data } = await dataServiceApi.fetchData(
+      `/ap`,
+      route.path,
+      undefined,
+      true
+    );
+    apResults.push({ id: route.id, data });
+  }
+  return {
+    props: {
+      ap: apResults,
+    }, // will be passed to the page component as props
+  };
 }
